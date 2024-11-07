@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pokédex</title>
+    <style>
+      .container-todos-pokemons {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+      .lista-pokemons {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+      .pokemon-item {
+        min-width: 200px;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Treinadores</h1>
+    <div class="container-todos-pokemons">
+      <div class="lista-pokemons">
+        <% treinadores.forEach(function(treinador) { %>
+        <div class="pokemon-item">
+          <a href="/treinadores/<%= treinador.id %>"><%= treinador.nome %></a>
+          <br />
+          Pokémons: <%= treinador.pokemons.map(p => p.nome).join(', ') %>
+          <!-- Exibe os nomes dos Pokémons -->
+          <br />
+          <img src="<%= treinador.imagem %>" alt="<%= treinador.nome %>" />
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <h1>Cadastrar Novo Treinador</h1>
+    <form action="/treinadores" method="POST">
+      <label for="nome">Treinador:</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="pokemons">Pokemons (separados por vírgula):</label>
+      <input type="text" id="pokemons" name="pokemons" required />
+
+      <label for="imagem">URL da Imagem:</label>
+      <input type="text" id="imagem" name="imagem" required />
+
+      <button type="submit">Cadastrar Treinador</button>
+    </form>
+  </body>
+</html>
+
+<!--testando para alteração de commit certo-->

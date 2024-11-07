@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pokédex</title>
+    <style>
+      .container-todos-pokemons {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+      .lista-pokemons {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+      .pokemon-item {
+        min-width: 200px;
+        margin-right: 10px;
+      }
+      .btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.7);
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        font-size: 18px;
+        z-index: 99;
+      }
+      .btn-prev {
+        left: 10px;
+      }
+      .btn-next {
+        right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Pokédex</h1>
+    <div class="container-todos-pokemons">
+      <button class="btn btn-prev" onclick="moveCarousel(-1)">&#10094;</button>
+      <div class="lista-pokemons">
+        <% pokemons.forEach(function(pokemon) { %>
+        <div class="pokemon-item">
+          <a href="/pokemons/<%= pokemon.id %>"><%= pokemon.nome %></a> - <%=
+          pokemon.tipo %>
+          <br />
+          <img src="<%= pokemon.imagem %>" alt="<%= pokemon.nome %>" />
+        </div>
+        <% }); %>
+      </div>
+      <button class="btn btn-next" onclick="moveCarousel(1)">&#10095;</button>
+    </div>
+
+    <h1>Cadastrar Novo Pokémon</h1>
+    <form action="/pokemons" method="POST">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="tipo">Tipo:</label>
+      <input type="text" id="tipo" name="tipo" required />
+
+      <label for="imagem">URL da Imagem:</label>
+      <input type="text" id="imagem" name="imagem" required />
+
+      <button type="submit">Cadastrar Pokémon</button>
+    </form>
+
+    <script>
+      let currentIndex = 0;
+      const itemsToShow = 5;
+      const listaPokemons = document.querySelector(".lista-pokemons");
+      const totalItems = document.querySelectorAll(".pokemon-item").length;
+
+      function moveCarousel(direction) {
+        currentIndex += direction;
+
+        if (currentIndex < 0) {
+          currentIndex = 0;
+        }
+
+        if (currentIndex > totalItems - itemsToShow) {
+          currentIndex = totalItems - itemsToShow;
+        }
+
+        const itemWidth = 250;
+        const offset = -currentIndex * itemWidth;
+        listaPokemons.style.transform = `translateX(${offset}px)`;
+
+        updateButtonVisibility();
+      }
+
+      function updateButtonVisibility() {
+        const prevButton = document.querySelector(".btn-prev");
+        const nextButton = document.querySelector(".btn-next");
+
+        prevButton.style.display = currentIndex === 0 ? "none" : "block";
+        nextButton.style.display =
+          currentIndex >= totalItems - itemsToShow ? "none" : "block";
+      }
+
+      updateButtonVisibility();
+    </script>
+  </body>
+</html>
